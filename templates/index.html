@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<style>
+* {
+  box-sizing: border-box;
+}
+body {
+  font-family: Monospace;
+  padding-bottom:20px;
+}
+.card {
+	position:relative;
+ box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  width: 100%;
+  border-radius: 5px;
+  top:20px;
+  padding-top:20px;
+  padding-bottom:10px;
+  
+  
+}
+
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+img {
+  border-radius: 5px 5px 5px 5px;
+  height: 120px;
+}
+
+.container {
+ padding: 2px 16px;
+ padding-left:20px;
+}
+
+
+form.example input[type=text] {
+  padding: 10px;
+  font-size: 17px;
+  border: 1px solid grey;
+  float: left;
+  width: 80%;
+  background: #f1f1f1;
+}
+button {
+  float: left;
+  width: 20%;
+  padding: 10px;
+  background: #2196F3;
+  color: white;
+  font-size: 17px;
+  border: 1px solid grey;
+  border-left: none;
+  cursor: pointer;
+}
+form.example button {
+  float: left;
+  width: 20%;
+  padding: 10px;
+  background: #2196F3;
+  color: white;
+  font-size: 17px;
+  border: 1px solid grey;
+  border-left: none;
+  cursor: pointer;
+}
+
+form.example button:hover {
+  background: #0b7dda;
+}
+
+form.example::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+.cont2 #vd{
+position:relative;
+float: right;
+right:10%;
+}
+</style>
+</head>
+<body>
+
+
+<h2>Search Button</h2>
+<form class="example" action="/channel" method="POST" style="margin:auto;max-width:300px">
+  <input type="text" placeholder="Search.." name="search2">
+  <button type="submit"><i class="fa fa-search"></i></button>
+</form>
+<div class="card">
+<center>
+  <img src= {{d[6]}}  height=120, width=120 style="width:200px;height:200px"/>
+  </center>
+  <div class="container">
+    <center><h4><b>{{d[0]}}</b></h4> </center>
+    <p><b>ChannelId:</b> {{d[1]}}</p>
+<p><b>Subscribers:</b> {{d[3]}}</p>
+<p><b>Videos:</b> {{d[4]}}</p>
+<p><b>Views:</b> {{d[10]}}</p>
+<p><b>Joined:</b> {{d[11]}}</p>
+<p><b>Verified:</b> {{d[12]}}</p>
+<p><b>For Family:</b> {{d[7]}}</p>
+<p><b>FacebookId:</b> {{d[8]}}</p>
+<p><b>Keywords:</b> {{d[9]}}</p>
+<p><b><u>Description</b></u></p>
+<p>{{d[5]}}</p>
+<div class="cont2">
+<span id="bt" style="cursor:pointer"><b><u>Channels</u></b></span>
+<span id="vd" style="cursor:pointer"><b><u>Videos(Only Recent 30)</u></b></span>
+</div>
+
+  </div>
+</div>
+
+<script>function f2(name,data,parent,elm="p",center="0%" ,cn="ch"){
+const para= document.createElement(elm);
+  para.classList.add(cn)
+para.style.fontWeight="bold";
+ const node2= document.createTextNode(name);
+para.appendChild(node2);
+const span =document.createElement("span");
+span.style.fontWeight="normal";
+ const node= document.createTextNode(data)
+span.appendChild(node);
+para.appendChild(span);
+
+para.style.position="relative";
+para.style.left=center;
+parent.appendChild(para);
+}
+function f3(){
+const ch=document.getElementsByClassName("ch");
+const vds=document.getElementsByClassName("vd");
+if(vds.length>1){
+[...vds].map(e=> e && e.remove());
+return
+}
+if (ch.length>1){
+
+[...ch].map(n=> n && n.remove());
+
+}
+const cont=document.getElementsByClassName("container")[0];
+var w =window.innerWidth;
+{% for i in  vd%}
+var  img= document.createElement("img");
+ img.classList.add("vd")
+ img.style.position="relative";
+ img.style.left="25%";
+ if((w/2)<{{i[6][0]}}){
+      img.style.width="50%";
+      img.style.height="50%";
+ }else{
+  img.style.width="{{i[6][0]}}";
+  img.style.height="{{i[6][1]}}";
+ }
+ img.src="{{i[5]}}"
+ cont.appendChild(img)
+f2("Title: ","{{i[1]}}",cont,elm="h4",center=false,cn="vd")  
+f2("Video-Id: ","{{i[0]}}",cont,elm="p",center=false,cn="vd")
+f2("Length: ","{{i[2]}}",cont,elm="p",center=false,cn="vd")
+f2("Views: ","{{i[3]}}",cont,elm="p",center=false,cn="vd")
+f2("Published: ","{{i[4]}}",cont,elm="p",center=false,cn="vd")
+//sno.style.fontWeight="bold";
+
+{% endfor %}
+
+}
+function f1(){
+//document.body.innerHTML+="hello";
+const ch=document.getElementsByClassName("ch");
+const vds=document.getElementsByClassName("vd");
+if(vds.length>1){
+[...vds].map(e=> e && e.remove());
+}
+if (ch.length>1){
+
+[...ch].map(n=> n && n.remove());
+
+return;
+}
+const cont=document.getElementsByClassName("container")[0];
+var w=window.innerWidth;
+
+{% for i in  ch%}
+var  img= document.createElement("img");
+ img.classList.add("ch")
+ 
+      img.style.position="relative";
+      img.style.left=String((w/4.5))+"px"
+      img.style.width="{{i[5][0]}}";
+      img.style.height="{{i[5][1]}}";
+      img.src="{{i[4]}}"
+      cont.append(img)
+      f2("{{i[0]}}","",cont,elm="h4",center=String((w/4.5)+40)+"px")  
+      f2("Channel-Url: ","{{i[3]}}",cont)
+      f2("Subscribers: ","{{i[2]}}",cont)
+      f2("Videos: ","{{i[1]}}",cont)
+ 
+
+//snode.style.fontWeight="bold";
+
+{% endfor %}
+}
+document.getElementById("bt").addEventListener("click",f1,false)
+
+document.getElementById("vd").addEventListener("click",f3,false)
+</script>
+</body>
+</html> 
